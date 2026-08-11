@@ -1,0 +1,42 @@
+ /******************************************************************************
+ *
+ * Module: Buzzer
+ *
+ * File Name: buzzer.h
+ *
+ * Description: header file for the Buzzer driver
+ *
+ * Author: Abdelrahman Hamada
+ *
+ *******************************************************************************/
+
+#ifndef BUZZER_H_
+#define BUZZER_H_
+
+#include "std_types.h"
+#include "gpio.h"
+
+/*------------------------- Configurations ----------------------------*/
+
+#define BUZZER_PIN PIN5_ID
+#define BUZZER_PORT PORTC_ID
+
+/*------------------------ Functions Prototype ------------------------*/
+
+/*
+ * Description :
+ * Initializes the buzzer pin direction and turn off the buzzer
+ */
+void Buzzer_init(void);
+/*
+ * Description :
+ * Activates the buzzer
+ */
+void Buzzer_on(void);
+/*
+ * Description :
+ * Deactivates the buzzer
+ */
+void Buzzer_off(void);
+
+#endif /* BUZZER_H_ */

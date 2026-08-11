@@ -1,0 +1,59 @@
+/******************************************************************************
+ *
+ * Module: UltraSonic Sensor
+ *
+ * File Name: ultrasonic.c
+ *
+ * Description: Source file for the UltraSonic Sensor driver
+ *
+ * Author: Abdelrahman Hamada
+ *
+ *******************************************************************************/
+#include "ultrasonic.h"
+#include "icu.h"
+#include "gpio.h"
+#include <util\delay.h>
+
+uint16 timerValue = 0;
+uint8 counter = 0;
+void Ultrasonic_init(void)
+{
+	ICU_ConfigType config1 = {F_CPU_8, RAISING};
+	ICU_init(&config1);
+
+	ICU_setCallBack(Ultrasonic_edgeProcessing);
+
+	GPIO_setupPinDirection(ULTRASONIC_ECHO_PORT_ID, ULTRASONIC_ECHO_PIN_ID, PIN_INPUT);
+	GPIO_setupPinDirection(ULTRASONIC_TRIGGER_PORT_ID, ULTRASONIC_TRIGGER_PIN_ID, PIN_OUTPUT);
+}
+void Ultrasonic_Trigger(void)
+{
+	GPIO_writePin(ULTRASONIC_TRIGGER_PORT_ID, ULTRASONIC_TRIGGER_PIN_ID, LOGIC_HIGH);
+	_delay_us(10);
+	GPIO_writePin(ULTRASONIC_TRIGGER_PORT_ID, ULTRASONIC_TRIGGER_PIN_ID, LOGIC_LOW);
+}
+uint16 Ultrasonic_readDistance(void)
+{
+	Ultrasonic_Trigger();
+
+	_delay_ms(50);
+
+	return (uint16)((float32)timerValue/117.6);
+}
+void Ultrasonic_edgeProcessing(void)
+{
+	counter++;
+	if(counter == 1)
+	{
+		ICU_clearTimerValue();
+		ICU_setEdgeDetectionType(FALLING);
+	}
+	else if(counter == 2)
+	{ //(uint16)((float32)(ICU_getInputCaptureValue())*170);
+		timerValue = ICU_getInputCaptureValue();
+		ICU_clearTimerValue();
+
+		counter = 0;
+		ICU_setEdgeDetectionType(RAISING);
+	}
+}

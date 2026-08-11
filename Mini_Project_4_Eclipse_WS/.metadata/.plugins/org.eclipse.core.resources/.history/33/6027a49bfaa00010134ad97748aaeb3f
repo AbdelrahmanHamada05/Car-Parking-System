@@ -1,0 +1,75 @@
+/*
+ ======================================================================================
+ Name        : mini_project_4.c
+ Author      : Abdelrahman Hamada
+ Description : Car Parking System
+ Date        : 26/9/2025
+ ======================================================================================
+ */
+#include "hal.h"
+
+int main(void)
+{
+	LCD_init();
+	Ultrasonic_init();
+	LED_init();
+	Buzzer_init();
+
+	LCD_displayString("Distance =");
+	uint16 distance;
+	while(1)
+	{
+		distance = Ultrasonic_readDistance();
+
+		LCD_moveCursor(0,11);
+		LCD_intgerToString(distance);
+		LCD_displayString("cm");
+
+
+		if(distance <= 5)
+		{
+			LCD_displayStringRowColumn(1,0,"STOP");
+			Buzzer_on();
+
+			LED_on(LED_RED);
+			LED_on(LED_GREEN);
+			LED_on(LED_BLUE);
+		}
+		else if((distance > 5) && (distance <= 10))
+		{
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_on(LED_RED);
+			LED_on(LED_GREEN);
+			LED_on(LED_BLUE);
+		}
+		else if((distance > 10) && (distance <= 15))
+		{
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_on(LED_RED);
+			LED_on(LED_GREEN);
+			LED_off(LED_BLUE);
+		}
+		else if((distance > 15) && (distance <= 20))
+		{
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_on(LED_RED);
+			LED_off(LED_GREEN);
+			LED_off(LED_BLUE);
+		}
+		else
+		{
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_off(LED_RED);
+			LED_off(LED_GREEN);
+			LED_off(LED_BLUE);
+		}
+	}
+}

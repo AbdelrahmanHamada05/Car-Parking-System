@@ -1,0 +1,118 @@
+/*
+ ======================================================================================
+ Name        : mini_project_4.c
+ Author      : Abdelrahman Hamada
+ Description : Car Parking System
+ Date        : 26/9/2025
+ ======================================================================================
+ */
+#include "hal.h"
+#include <util\delay.h>
+#include <avr/io.h>
+
+int main(void)
+{
+	/*
+	 * Enabling The Global Interrupt
+	 */
+	SREG |= (1<<7);
+
+	/*------------ Initializations -------------*/
+	LCD_init();
+	Ultrasonic_init();
+	LED_init();
+	Buzzer_init();
+	/*------------------------------------------*/
+
+	LCD_displayString("Distance =");
+	uint16 distance;
+	while(1)
+	{
+		/*
+		 * Reading the distance from the ultrasonic sensor.
+		 */
+		distance = Ultrasonic_readDistance();
+		/*
+		 * Displaying the distance.
+		 */
+		LCD_moveCursor(0,11);
+		LCD_intgerToString(distance);
+		LCD_displayString("cm");
+
+		/* Distance <= 5cm: All LEDs are flashing (Red, Green, Blue), Buzzer
+		 * sounds, LCD shows "Stop."
+		 * 6cm <= Distance <= 10cm: All LEDs ON (Red, Green, Blue), No
+		 * buzzer.
+		 * 11cm <= Distance <= 15cm: Red and Green LEDs ON, Blue LED OFF.
+		 * 16cm <= Distance <= 20cm: Only Red LED ON, others OFF.
+		 * Distance > 20cm: All LEDs OFF, Buzzer OFF.
+		 * */
+		if(distance <= 5)
+		{
+			LCD_displayStringRowColumn(1,0,"STOP");
+			Buzzer_on();
+
+			LED_on(LED_RED);
+			LED_on(LED_GREEN);
+			LED_on(LED_BLUE);
+			_delay_ms(200);
+
+			LED_off(LED_RED);
+			LED_off(LED_GREEN);
+			LED_off(LED_BLUE);
+			_delay_ms(200);
+		}
+		else if((distance > 5) && (distance <= 10))
+		{
+			/*
+			 * Clearing "Stop" if existed
+			 * Disabling Buzzer
+			 */
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_on(LED_RED);
+			LED_on(LED_GREEN);
+			LED_on(LED_BLUE);
+		}
+		else if((distance > 10) && (distance <= 15))
+		{
+			/*
+			 * Clearing "Stop" if existed
+			 * Disabling Buzzer
+			 */
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_on(LED_RED);
+			LED_on(LED_GREEN);
+			LED_off(LED_BLUE);
+		}
+		else if((distance > 15) && (distance <= 20))
+		{
+			/*
+			 * Clearing "Stop" if existed
+			 * Disabling Buzzer
+			 */
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_on(LED_RED);
+			LED_off(LED_GREEN);
+			LED_off(LED_BLUE);
+		}
+		else
+		{
+			/*
+			 * Clearing "Stop" if existed
+			 * Disabling Buzzer
+			 */
+			LCD_displayStringRowColumn(1,0,"    ");
+			Buzzer_off();
+
+			LED_off(LED_RED);
+			LED_off(LED_GREEN);
+			LED_off(LED_BLUE);
+		}
+	}
+}

@@ -1,0 +1,55 @@
+/******************************************************************************
+ *
+ * Module: UltraSonic Sensor
+ *
+ * File Name: ultrasonic.h
+ *
+ * Description: Source file for the UltraSonic Sensor driver
+ *
+ * Author: Abdelrahman Hamada
+ *
+ *******************************************************************************/
+#ifndef ULTRASONIC_H_
+#define ULTRASONIC_H_
+
+#include "std_types.h"
+#include "gpio.h"
+
+/*------------------------- Configurations ----------------------------*/
+
+#define ULTRASONIC_TRIGGER_PORT_ID   PORTD_ID
+#define ULTRASONIC_TRIGGER_PIN_ID    PIN7_ID
+
+/*------------------------ Functions Prototype ------------------------*/
+
+#define US_VCC 5
+
+/*
+ * Description:
+ * Initialize the ultrasonic:
+ * 1. Initialize ICU driver
+ * 2. Set ICU callback function
+ * 3. Configure trigger pin as output
+ */
+void Ultrasonic_init(void);
+
+/*
+ * Description:
+ * Send the trigger pulse to HC-SR04 sensor
+ */
+void Ultrasonic_Trigger(void);
+
+/*
+ * Description:
+ * Trigger the sensor and return the measured distance in cm
+ */
+uint16 Ultrasonic_readDistance(void);
+
+/*
+ * Description:
+ * Callback function for ICU – calculates the high time of Echo pulse
+ */
+void Ultrasonic_edgeProcessing(void);
+
+
+#endif /* ULTRASONIC_H_ */

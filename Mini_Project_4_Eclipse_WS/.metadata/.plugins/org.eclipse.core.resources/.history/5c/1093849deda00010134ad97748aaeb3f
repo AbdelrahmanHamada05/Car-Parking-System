@@ -1,0 +1,17 @@
+/******************************************************************************
+ *
+ * Module: UltraSonic Sensor
+ *
+ * File Name: ultrasonic.h
+ *
+ * Description: Source file for the UltraSonic Sensor driver
+ *
+ * Author: Abdelrahman Hamada
+ *
+ *******************************************************************************/
+#ifndef ULTRASONIC_H_
+#define ULTRASONIC_H_
+
+
+
+#endif /* ULTRASONIC_H_ */

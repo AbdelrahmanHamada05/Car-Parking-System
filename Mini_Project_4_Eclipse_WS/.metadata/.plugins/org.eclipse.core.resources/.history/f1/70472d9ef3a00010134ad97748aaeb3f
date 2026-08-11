@@ -1,0 +1,18 @@
+/******************************************************************************
+ *
+ * Module: UltraSonic Sensor
+ *
+ * File Name: ultrasonic.c
+ *
+ * Description: Source file for the UltraSonic Sensor driver
+ *
+ * Author: Abdelrahman Hamada
+ *
+ *******************************************************************************/
+#include "ultrasonic.h"
+#include "icu.h"
+ICU_ConfigType config1 = {F_CPU_8, RAISING};
+void Ultrasonic_init(void)
+{
+	ICU_init(config1);
+}
